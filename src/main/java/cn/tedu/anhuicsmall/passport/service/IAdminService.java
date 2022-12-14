@@ -29,7 +29,7 @@ public interface IAdminService extends IService<Admin> {
      * 添加管理员的方法
      * @param adminAddNewDTO 添加管理员的DTO类
      */
-    void adNew(AdminAddNewDTO adminAddNewDTO);
+    void addNew(AdminAddNewDTO adminAddNewDTO);
 
     /**
      * 根据管理员用户名查询管理员信息

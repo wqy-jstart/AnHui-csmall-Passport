@@ -9,6 +9,7 @@ import cn.tedu.anhuicsmall.passport.pojo.entity.Admin;
 import cn.tedu.anhuicsmall.passport.pojo.entity.AdminRole;
 import cn.tedu.anhuicsmall.passport.security.AdminDetails;
 import cn.tedu.anhuicsmall.passport.service.IAdminService;
+import cn.tedu.anhuicsmall.passport.util.BCryptEncode;
 import cn.tedu.anhuicsmall.passport.web.ServiceCode;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -122,7 +123,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
      * @param adminAddNewDTO 接收客户端的DTO对象
      */
     @Override
-    public void adNew(AdminAddNewDTO adminAddNewDTO) {
+    public void addNew(AdminAddNewDTO adminAddNewDTO) {
         log.debug("开始处理添加[添加管理员]的业务!,参数：{}", adminAddNewDTO);
 
         log.debug("即将检查用户名是否被占用……");
@@ -158,6 +159,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         // 创建Admin对象
         Admin admin = new Admin();
         BeanUtils.copyProperties(adminAddNewDTO, admin);
+        admin.setPassword(BCryptEncode.encryptionPassword(adminAddNewDTO.getPassword()));
         // 补全Admin对象中的属性值：loginCount >>> 0
         admin.setLoginCount(0);// 设置累计登录次数
         int rows = adminMapper.insert(admin);

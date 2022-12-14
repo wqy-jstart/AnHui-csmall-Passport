@@ -68,7 +68,7 @@ public class AdminController {
     @PreAuthorize("hasAuthority('/ams/admin/add-new')")
     @PostMapping("/add-new")
     public JsonResult<Void> addNew(@Valid AdminAddNewDTO adminAddNewDTO){
-        adminService.adNew(adminAddNewDTO);
+        adminService.addNew(adminAddNewDTO);
         return JsonResult.ok();
     }
 
@@ -96,7 +96,7 @@ public class AdminController {
     @ApiOperationSupport(order = 200)
     @ApiImplicitParam(name = "id",value = "管理员id",required = true,dataType = "long")
     @PreAuthorize("hasAuthority('/ams/admin/delete')")
-    @PostMapping("/{id:[0-9]+}/delete")
+    @PostMapping("/{id:[0-9]+}/deleteById")
     public JsonResult<Void> delete(@Range(min = 1,message = "删除管理员失败,尝试删除的管理员id无效") @PathVariable Long id){
         log.debug("开始处理[删除管理员]的请求,管理员id为{}",id);
         adminService.deleteById(id);
