@@ -1,8 +1,6 @@
 package cn.tedu.anhuicsmall.passport.pojo.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -39,11 +37,13 @@ public class AdminRole implements Serializable {
      * 数据创建时间
      */
     @ApiModelProperty(value = "插入时间")
+    @TableField(fill = FieldFill.INSERT)
     private Date gmtCreate;
 
     /**
      * 数据最后修改时间
      */
     @ApiModelProperty(value = "修改时间")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date gmtModified;
 }

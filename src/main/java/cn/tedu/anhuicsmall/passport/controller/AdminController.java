@@ -2,6 +2,7 @@ package cn.tedu.anhuicsmall.passport.controller;
 
 import cn.tedu.anhuicsmall.passport.pojo.dto.AdminAddNewDTO;
 import cn.tedu.anhuicsmall.passport.pojo.dto.AdminLoginDTO;
+import cn.tedu.anhuicsmall.passport.pojo.dto.AdminUpdateDTO;
 import cn.tedu.anhuicsmall.passport.pojo.entity.Admin;
 import cn.tedu.anhuicsmall.passport.security.LoginPrincipal;
 import cn.tedu.anhuicsmall.passport.service.IAdminService;
@@ -73,6 +74,21 @@ public class AdminController {
     }
 
     /**
+     * 根据id修改管理员信息
+     * @param adminUpdateDTO 修改的数据
+     * @return 返回结果集
+     */
+    @ApiOperation("根据id修改管理员信息")
+    @ApiOperationSupport(order = 200)
+    @PreAuthorize("hasAuthority('/ams/admin/update')")
+    @PostMapping("/update")
+    public JsonResult<Void> update(AdminUpdateDTO adminUpdateDTO){
+        log.debug("开始处理修改id为{}的管理员信息",adminUpdateDTO.getId());
+        adminService.update(adminUpdateDTO);
+        return JsonResult.ok();
+    }
+
+    /**
      * 根据用户名查询管理员信息
      * @param username 用户名
      * @return 返回信息
@@ -84,6 +100,22 @@ public class AdminController {
                                               String username){
         log.debug("开始处理根据用户名查询管理员信息的请求,参数:{}",username);
         Admin admin = adminService.selectByUserName(username);
+        return JsonResult.ok(admin);
+    }
+
+    /**
+     * 根据id查询管理员信息
+     * @param id 管理员id
+     * @return 返回信息
+     */
+    @ApiOperation("根据用户名查询管理员信息")
+    @ApiOperationSupport(order = 501)
+    @ApiImplicitParam(name = "id",value = "管理员id",required = true,dataType = "long")
+    @PreAuthorize("hasAuthority('/ams/admin/read')")
+    @GetMapping("/{id:[0-9]+}/selectById")
+    public JsonResult<Admin> selectById(@Range(min = 1,message = "查询失败,该管理员id无效!")   @PathVariable Long id){
+        log.debug("开始处理查询id为{}的管理员信息",id);
+        Admin admin = adminService.selectById(id);
         return JsonResult.ok(admin);
     }
 

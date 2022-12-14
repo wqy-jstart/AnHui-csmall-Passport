@@ -2,6 +2,7 @@ package cn.tedu.anhuicsmall.passport.service;
 
 import cn.tedu.anhuicsmall.passport.pojo.dto.AdminAddNewDTO;
 import cn.tedu.anhuicsmall.passport.pojo.dto.AdminLoginDTO;
+import cn.tedu.anhuicsmall.passport.pojo.dto.AdminUpdateDTO;
 import cn.tedu.anhuicsmall.passport.pojo.entity.Admin;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,11 +33,24 @@ public interface IAdminService extends IService<Admin> {
     void addNew(AdminAddNewDTO adminAddNewDTO);
 
     /**
+     * 根据id修改管理员信息
+     * @param adminUpdateDTO 修改的信息
+     */
+    void update(AdminUpdateDTO adminUpdateDTO);
+
+    /**
      * 根据管理员用户名查询管理员信息
      * @param username 用户名
      * @return 返回信息
      */
     Admin selectByUserName(String username);
+
+    /**
+     * 根据用户id查询管理员信息
+     * @param id 用户id
+     * @return 返回用户信息
+     */
+    Admin selectById(Long id);
 
     /**
      * 根据id删除管理员

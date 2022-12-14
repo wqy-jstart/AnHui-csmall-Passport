@@ -12,6 +12,12 @@ import java.io.Serializable;
 public class AdminUpdateDTO implements Serializable {
 
     /**
+     * 管理员id
+     */
+    @ApiModelProperty("管理员id")
+    private Long id;
+
+    /**
      * 管理员密码(密文)
      */
     @ApiModelProperty(value = "管理员密码(密文)")

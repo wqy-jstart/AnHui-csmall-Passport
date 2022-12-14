@@ -5,6 +5,7 @@ import cn.tedu.anhuicsmall.passport.mapper.AdminMapper;
 import cn.tedu.anhuicsmall.passport.mapper.AdminRoleMapper;
 import cn.tedu.anhuicsmall.passport.pojo.dto.AdminAddNewDTO;
 import cn.tedu.anhuicsmall.passport.pojo.dto.AdminLoginDTO;
+import cn.tedu.anhuicsmall.passport.pojo.dto.AdminUpdateDTO;
 import cn.tedu.anhuicsmall.passport.pojo.entity.Admin;
 import cn.tedu.anhuicsmall.passport.pojo.entity.AdminRole;
 import cn.tedu.anhuicsmall.passport.security.AdminDetails;
@@ -148,7 +149,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
 
         log.debug("即将检查电子邮箱是否被占用……");
         QueryWrapper<Admin> wrapperToEmail = new QueryWrapper<>();
-        wrapperToPhone.eq("email", adminAddNewDTO.getEmail());
+        wrapperToEmail.eq("email", adminAddNewDTO.getEmail());
         Admin queryAdminToEmail = adminMapper.selectOne(wrapperToEmail);
         if (queryAdminToEmail != null) {
             String message = "添加管理员失败,电子邮箱[" + adminAddNewDTO.getEmail() + "]已经被占用!";
@@ -195,6 +196,43 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     }
 
     /**
+     * 根据id修改管理员信息
+     * @param adminUpdateDTO 修改的信息
+     */
+    @Override
+    public void update(AdminUpdateDTO adminUpdateDTO) {
+        log.debug("开始处理修改id为{}的管理员信息",adminUpdateDTO.getId());
+        QueryWrapper<Admin> wrapper = new QueryWrapper<>();
+        wrapper.ne("id",adminUpdateDTO.getId());
+        wrapper.eq("phone",adminUpdateDTO.getPhone());
+        Admin adminToPhone = adminMapper.selectOne(wrapper);
+        if (adminToPhone != null){
+            String message = "修改失败,该手机号已被占用!";
+            log.debug(message);
+            throw new ServiceException(ServiceCode.ERROR_CONFLICT,message);
+        }
+        QueryWrapper<Admin> wrapperToEmail = new QueryWrapper<>();
+        wrapperToEmail.ne("id",adminUpdateDTO.getId());
+        wrapperToEmail.eq("email",adminUpdateDTO.getEmail());
+        Admin adminToEmail = adminMapper.selectOne(wrapperToEmail);
+        if (adminToEmail != null){
+            String message = "修改失败,该电子邮箱已被占用!";
+            log.debug(message);
+            throw new ServiceException(ServiceCode.ERROR_CONFLICT,message);
+        }
+
+        Admin admin = new Admin();
+        BeanUtils.copyProperties(adminUpdateDTO,admin);
+        admin.setPassword(BCryptEncode.encryptionPassword(adminUpdateDTO.getPassword()));
+        int rows = adminMapper.updateById(admin);
+        if (rows>1){
+            String message = "修改失败,服务器忙,请稍后再试...";
+            log.debug(message);
+            throw new ServiceException(ServiceCode.ERR_UPDATE,message);
+        }
+    }
+
+    /**
      * 根据用户名查询管理员信息
      * @param username 用户名
      * @return 返回管理员信息
@@ -207,6 +245,23 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         Admin admin = adminMapper.selectOne(wrapper);
         if (admin == null){
             String message = "查询失败,该管理员不存在!";
+            log.debug(message);
+            throw new ServiceException(ServiceCode.ERR_NOT_FOUND,message);
+        }
+        return admin;
+    }
+
+    /**
+     * 根据id查询管理员信息
+     * @param id 管理员id
+     * @return 返回管理员信息
+     */
+    @Override
+    public Admin selectById(Long id) {
+        log.debug("开始处理查询id为{}的管理员信息",id);
+        Admin admin = adminMapper.selectById(id);
+        if (admin == null){
+            String message = "查询失败,该管理员信息不存在!";
             log.debug(message);
             throw new ServiceException(ServiceCode.ERR_NOT_FOUND,message);
         }
