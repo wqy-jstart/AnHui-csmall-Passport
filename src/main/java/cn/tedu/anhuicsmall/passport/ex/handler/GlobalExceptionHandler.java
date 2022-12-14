@@ -125,9 +125,9 @@ public class GlobalExceptionHandler {
      * @param e 全局的异常类
      * @return 返回异常处理反馈的信息
      */
-//    @ExceptionHandler
-//    public String handlerServiceException(Throwable e){
-//        log.debug("这是一个Throwable异常,将统一处理");
-//        return e.getMessage();
-//    }
+    @ExceptionHandler
+    public String handlerServiceException(Throwable e){
+        log.debug("这是一个Throwable异常,将统一处理");
+        return e.getMessage();
+    }
 }

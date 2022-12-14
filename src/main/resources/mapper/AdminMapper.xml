@@ -3,7 +3,7 @@
 
 <mapper namespace="cn.tedu.anhuicsmall.passport.mapper.AdminMapper">
 
-    <!--AdminLoginInfoVO selectByUsername(String username);-->
+    <!--AdminLoginInfoVO getLoginInfoByUsername(String username);-->
     <select id="getLoginInfoByUsername" resultMap="LoginResultRM">
         SELECT
         <include refid="LoginQueryFields"/>
