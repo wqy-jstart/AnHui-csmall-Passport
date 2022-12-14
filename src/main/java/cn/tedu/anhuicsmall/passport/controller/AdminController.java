@@ -73,6 +73,21 @@ public class AdminController {
     }
 
     /**
+     * 根据用户名查询管理员信息
+     * @param username 用户名
+     * @return 返回信息
+     */
+    @ApiOperation("根据用户名查询管理员信息")
+    @ApiOperationSupport(order = 500)
+    @GetMapping("/selectByUsername")
+    public JsonResult<Admin> selectByUsername(@RequestParam(value = "username")
+                                              String username){
+        log.debug("开始处理根据用户名查询管理员信息的请求,参数:{}",username);
+        Admin admin = adminService.selectByUserName(username);
+        return JsonResult.ok(admin);
+    }
+
+    /**
      * 处理删除管理员的请求
      * @param id 要删除的管理员id
      * @return 返回JsonResult

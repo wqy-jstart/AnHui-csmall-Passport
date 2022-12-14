@@ -193,6 +193,25 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     }
 
     /**
+     * 根据用户名查询管理员信息
+     * @param username 用户名
+     * @return 返回管理员信息
+     */
+    @Override
+    public Admin selectByUserName(String username) {
+        log.debug("开始处理根据用户名查询管理员信息,参数:{}",username);
+        QueryWrapper<Admin> wrapper = new QueryWrapper<>();
+        wrapper.eq("username",username);
+        Admin admin = adminMapper.selectOne(wrapper);
+        if (admin == null){
+            String message = "查询失败,该管理员不存在!";
+            log.debug(message);
+            throw new ServiceException(ServiceCode.ERR_NOT_FOUND,message);
+        }
+        return admin;
+    }
+
+    /**
      * 删除管理员的功能
      * (1).判断id是否为1
      * (2).判断id下有无数据

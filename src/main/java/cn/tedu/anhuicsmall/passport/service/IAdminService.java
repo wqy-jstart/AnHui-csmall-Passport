@@ -32,6 +32,13 @@ public interface IAdminService extends IService<Admin> {
     void adNew(AdminAddNewDTO adminAddNewDTO);
 
     /**
+     * 根据管理员用户名查询管理员信息
+     * @param username 用户名
+     * @return 返回信息
+     */
+    Admin selectByUserName(String username);
+
+    /**
      * 根据id删除管理员
      * @param id 要删除的管理员id
      */
